@@ -1,0 +1,72 @@
+﻿@model GivingActually.Models.StoriesListViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="panel panel-body">
+    <div id="nav">
+        <div class="content">
+            <ul>
+                <li class="first">Home</li>
+                <li>@Html.ActionLink("User Details", "UserDetails", "Admin", new { area = "" }, new { @class = "" })</li>
+                <li>@Html.ActionLink("Stories", "GetStories", "Admin", new { area = "" }, new { @class = "" })</li>
+            </ul>
+        </div>
+    </div>
+    <div class="div-center"><h2>The Campaigns that Need Your attention!!</h2></div>
+
+    @*<div class="form-group">
+        @Html.LabelFor(model => model.CategoryType, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @Html.DropDownListFor(model => model.CategoryType, EnumHelper.GetSelectList(typeof(GivingActually.Models.HelperModels.Helper.StoryCategory)), "Select", new { @class = "form-control", onChange = "OnTypeChanged(this)" })
+            @Html.ValidationMessageFor(model => model.CategoryType, "", new { @class = "text-danger" })
+        </div>
+    </div>*@
+    <div class="row">
+
+        @if (Model.StoriesViewModel.Any())
+        {
+            foreach (var item in Model.StoriesViewModel)
+            {
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="div_topCampaignss">
+
+                        @foreach (var fitem in item.Files)
+                        {
+                            var getImage = System.Convert.ToBase64String(fitem.File);
+                            var Picture = string.Format("data:image/JPG;base64 , {0}", getImage);
+
+                            <img src="@Url.Content(Picture)" alt="@fitem.FileName" height="200" width="280" />
+                            break;
+                        }
+                        <p> @(String.Format("{0}{1}", item.Story.Substring(0, item.Story.Length > 40 ? 40 : item.Story.Length), "....."))</p>
+                        <p style="text-align:center">@item.StoryTitle</p>
+                        @Html.DisplayFor(modelItem => item.CategoryName)
+                        <p>
+                            <a href='/User/GetStoryDetail/?Id=@item.Id'>See More</a>
+                            |@Html.ActionLink("Delete", "DeleteStories", "User", new { id = item.Id })
+                        </p>
+                        <hr />
+                    </div>
+                </div>
+
+            }
+        }
+        else
+        {<p>No records Found</p>}
+
+
+
+    </div>
+
+
+
+</div>
+<script type="text/javascript">
+
+    //function SelectedIndexChanged(dropdown) {
+    //    var valu = dropdown.value;
+    //    window.location.href = '/Home/GetStories/?Category=' + valu;// $("#SelectedOptions").val();
+    //}
+</script>

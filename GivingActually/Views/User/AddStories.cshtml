@@ -1,0 +1,300 @@
+﻿@model GivingActually.Models.StoriesViewModel
+
+@{
+    ViewBag.Title = "AddStories";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<h2>AddStories</h2>
+
+@Html.AntiForgeryToken()
+@using (Html.BeginForm("AddStories", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-horizontal" id="FormUpload">
+        <hr />
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.UserId)
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.StoryTitle, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.TextBoxFor(model => model.StoryTitle, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.StoryTitle, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.StoryCategory, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownListFor(model => model.StoryCategory,
+            EnumHelper.GetSelectList(typeof(GivingActually.Models.HelperModels.Helper.StoryCategory)),
+            "Select Category",
+            new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.StoryCategory, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Story, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Story, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Story, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            @*<div class="col-lg-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.BeneficiaryDetails, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">                      
+                        <div class="input-group">
+                            @Html.TextBoxFor(m => m.BeneficiaryDetails, new { @id = "BeneficiaryBtn", data_keyboard = "false", @Value = ViewBag.Result, })
+                            <button type="button" id="btnLaunch" class="btn btn-primary" title="Add Beneficiary Details"><span class="glyphicon  glyphicon-user"></span></button>
+                        </div>
+                        @Html.HiddenFor(m => m.Beneficiary.Id, new { @Value = ViewBag.name })
+                    </div>
+                </div>
+
+
+            </div>*@
+
+            @*<div class="col-lg-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Location, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Location, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>*@
+
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            @*<div class="col-lg-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Bank, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.Bank, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Bank, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>*@
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.Label("File 1", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        <input type="file" name="file1" id="File1" style="width: 100%;" class="form-control" accept=".png,.jpg,.jpeg,.gif,.tif" filesize="10" /> <br />
+                        @*@Html.TextBoxFor(model => model.File1, new { Type = "File" })*@
+                        @*@Html.TextBoxFor(m => m.File1, new { @type = "file", @class = "form-control", id = "ImgUpload" })*@
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.Label("File 2", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        <input type="file" class="form-control" name="file2" id="File2" style="width: 100%;" accept=".png,.jpg,.jpeg,.gif,.tif" filesize="10" /> <br />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.Label("File 3", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        <input type="file" class="form-control" name="file3" id="File3" style="width: 100%;" accept=".png,.jpg,.jpeg,.gif,.tif" filesize="1048576" /> <br />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.Label("File 4", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        <input type="file" class="form-control" name="file4" id="File4" style="width: 100%;" accept=".png,.jpg,.jpeg,.gif,.tif" filesize="1048576" /> <br />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    @Html.Label("File 5", htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        <input type="file" class="form-control" name="file5" id="File5" style="width: 100%;" accept=".png,.jpg,.jpeg,.gif,.tif" filesize="1048576" /> <br />
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-8">
+                        <input type="submit" value=@(Model.Id == 0 ? "Create" : "Update") />
+                        @*<input type="button" id="btnUpload" value="Upload Files" class="btn btn-default" />*@
+                        @*<button type="button" class="btn btn-primary" id="addprofile" value="">Submit</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="form">
+        <div class="modal-content">
+            @{
+                Html.RenderPartial("_BeneficiaryDetails", Model);
+            }
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("input[type='file']").on("change", function () {
+            if (this.files[0].size > 2000000) {
+                alert("Please upload file less than 2MB. Thanks!!");
+                $(this).val('');
+            }
+        });
+
+
+        $("#BeneficiaryBtn").click(function () {
+            $("#exampleModalCenter").modal();
+        });
+
+        $(function () {
+            $('#btnLaunch').click(function () {
+                $('#exampleModalCenter').modal('show');
+            });
+
+
+        });
+        $('#addprofile').click(function () {
+
+            var formData = new FormData();
+            var files = $("#ImgUpload").get(0).files;// encodeURIComponent(document.getElementById("base").innerHTML);
+
+            formData.append('StoryTitle', $("#StoryTitle").val());
+            formData.append('StoryCategory', $("#StoryCategory").val());
+            formData.append('File1', files[0]);
+            formData.append('Story', $("#Story").val());
+
+            $.ajax({
+                type: 'POST',
+                url: "/User/UploadFiles",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response == 1) {
+                        alert("successfully Profile Updated");
+                    }
+                    else {
+                        alert("Something Went Wrong..");
+                    }
+                }
+            });
+        });
+
+
+
+        $('#btnUpload').click(function () {
+            //alert('tets');
+            //// Checking whether FormData is available in browser
+            //// if (window.FormData !== undefined) {
+            ////var form = $('#FormUpload')[0];
+
+            //////// Create an FormData object
+            //////var data = new FormData(form);s
+            ////var fileUpload = $("#File1").get(0);
+            ////var files = fileUpload.files;
+            //var formData = new FormData();
+            //var totalFiles = document.getElementById("File1").files.length;
+            //for (var i = 0; i < totalFiles; i++) {
+            //    var file = document.getElementById("File1").files[i];
+
+            //    formData.append("File1", file);
+            //}
+            ////formData.append("File1", $("#File1").file);
+            ////formData.append("File2", $("#File2").file);
+            ////formData.append("File3", $("#File3").file);
+            ////formData.append("File4", $("#File4").file);
+            ////formData.append("File5", $("#File5").file);
+            //formData.append('StoryTitle', $("#StoryTitle").val());
+            //formData.append('StoryCategory', $("#StoryCategory").val());
+            //formData.append('Story', $("#Story").val());
+            ////$.ajax({
+            ////    type: "POST",
+            ////    url: '/User/UploadFiles',
+            ////    data: formData,
+            ////    dataType: 'json',
+            ////    contentType: "multipart/form-data",
+            ////    processData: false,
+            ////    success: function (response) {
+            ////        alert(response);
+            ////    },
+            ////    error: function (error) {
+            ////        alert(error);
+            ////    }
+            ////});
+
+
+            //// Adding one more key to FormData object
+
+
+            //$.ajax({
+            //    url: '/User/UploadFiles',
+            //    type: "POST",
+            //    contentType: false, // Not to set any content header
+            //    processData: false, // Not to process data
+            //    data: formData,
+            //    success: function (result) {
+            //        alert(result);
+            //    },
+            //    error: function (err) {
+            //        alert(err.statusText);
+            //    }
+            //});
+            //} else {
+            //    alert("FormData is not supported.");
+            //}
+            var formData = new FormData();
+            var fileUpload = $("#ImgUpload").get(0);
+            var files = fileUpload.files;
+
+
+            $.ajax({
+                type: "POST",
+                url: '/User/UploadFiles',
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function (response) {
+
+                },
+                error: function (error) {
+
+                }
+            });
+        });
+    });
+</script>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

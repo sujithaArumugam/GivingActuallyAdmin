@@ -1,0 +1,7 @@
+﻿@model GivingActually.Models.CampaignMainViewModel
+<p style="text-align:center">
+
+    <a href='/Admin/GetStoryDetail/?Id=@Model.Id'>See More</a>
+    | @Html.ActionLink(Model.IsApprovedbyAdmin ? "Un Approve" : "Approve", "ApproveStory", new { id = item.Id, Approve = item.IsApprovedbyAdmin ? false : true }) |
+    @Html.ActionLink("Delete", "Delete", new { id = Model.Id })
+</p>

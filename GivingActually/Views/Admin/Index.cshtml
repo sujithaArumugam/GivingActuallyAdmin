@@ -1,0 +1,552 @@
+﻿@model GivingActually.Models.CampainListsforIndexViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    ViewBag.Title = "Admin";
+}
+
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="~/Scripts/toastr.js"></script>
+<link href="~/Content/toastr.css" rel="stylesheet" />
+<div class="container" style="padding-top:2em;">
+    <div class="row">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#MyCampaigns">Home</a></li>
+            <li>@Html.ActionLink("User Details", "UserDetails", "Admin", new { area = "" }, new { @class = "" })</li>
+            <li>@Html.ActionLink("Campaigns", "AllCampaigns", "Admin", new { area = "" }, new { @class = "" })</li>
+
+
+        </ul>
+        <h1 class="page-header">
+            Campaigns
+            <small>Just click to see and Approve what are the people need?!!</small>
+        </h1>
+
+        <div class="col-md-12 text-center " style="padding-bottom:2em;">
+            <div class="form-group">
+                @Html.LabelFor(model => model.CategoryType, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.DropDownListFor(model => model.CategoryType, EnumHelper.GetSelectList(typeof(GivingActually.Models.HelperModels.Helper.StoryCategory)), "Select", new { @class = "form-control", onChange = "OnTypeChanged(this)" })
+                    @Html.ValidationMessageFor(model => model.CategoryType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container col-md-12">
+                <div class="col-md-12" style="padding-top:2em;">
+                    <center>
+                        <div class="col-md-12">
+                            <div class="panel-group" id="accordion2" role="tablist" aria-multiselectable="true">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingOne2">
+                                        <h4 class="panel-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne2" aria-expanded="true" aria-controls="collapseOne">
+                                                <b>Campaigns - Created Newly!!</b>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOne2" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne2">
+                                        <div class="panel-body">
+                                            <div class="panelid">
+                                                @if (Model.NewStoriesViewModel.CampaignViewModelList.Any())
+                                                {
+                                                    int i = 0;
+                                                    foreach (var item in Model.NewStoriesViewModel.CampaignViewModelList)
+                                                    {
+                                                        i = i + 1;
+
+
+                                                        <div class="col-md-4 portfolio-item">
+                                                            <div class="div_topCampaignss">
+
+                                                                <h4 class="cam_card-header">@item.CampaignTitle</h4>
+
+
+                                                                <a href='/Admin/CampaignView/?Id=@item.Id'>
+                                                                    <p style="" class="text-center">
+                                                                        @if (item.CampainOrganizer.BDisplayPic != null)
+                                                                        {
+                                                                            var getImage = System.Convert.ToBase64String(item.CampainOrganizer.BDisplayPic);
+                                                                            var Picture = string.Format("data:image/JPG;base64 , {0}", getImage);
+
+                                                                            if (i > 6)
+                                                                            {
+                                                                                <img class="lazy cam-card-image img-responsive" src="~/Images/placeholder_main.png" data-src="@Url.Content(Picture)" alt="@item.CampainOrganizer.BDisplayPicName">
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <img class="cam-card-image img-responsive" src="@Url.Content(Picture)" alt="@item.CampainOrganizer.BDisplayPicName">
+
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {<img id="user_img"
+                                                                              margin-left="0px"
+                                                                              margin-right="180px"
+                                                                              class="cam-card-image img-responsive" />
+                                                                        }
+                                                                    </p>
+                                                                </a>
+                                                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                    <div class="col-md-6 col-sm-6 col-xs-6 text-left">
+                                                                        <span>
+                                                                            <i class="glyphicon glyphicon-tag icon_tag">
+                                                                            </i><label style="font-size:12px"> @item.CategoryName</label>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="col-md-6 col-sm-6 col-xs-6 text-right">
+                                                                        <span>
+                                                                            <i class="glyphicon glyphicon-map-marker icon_tag">
+                                                                            </i><label class="text-left" style="font-size:12px;width:100px">
+                                                                                @(String.Format("{0}", item.CampainOrganizer.placeNmae))
+                                                                            </label>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-center cam-desc">
+                                                                    <p>@(String.Format("{0}{1}", item.campaignDescription != null ? (item.campaignDescription.StoryDescription != null ? item.campaignDescription.StripedDescription.Substring(0, item.campaignDescription.StripedDescription.Length > 75 ? 75 : item.campaignDescription.StripedDescription.Length) : "") : "", "....."))</p>
+                                                                </div>
+                                                                <p class="text-center cam-desc-more">
+
+                                                                    <a href='/Admin/CampaignView/?Id=@item.Id'>Read More</a>
+                                                                    | @Html.ActionLink(item.IsApprovedbyAdmin ? "Un Approve" : "Approve", "ApproveStory", new { id = item.Id, Approve = item.IsApprovedbyAdmin ? false : true }, new { @class = "Approve" })
+
+
+                                                                </p>
+
+                                                                <div class="text-center prog_div">
+                                                                    <div class="row">
+                                                                        <div class=" col-md-6 text-left">
+                                                                            <span class="prog_desc">Raised: &nbsp;&nbsp; <bold>@Model.CurrencyCode <span style="font-weight:bolder">@item.RaisedAmount</span> </bold> </span>
+                                                                        </div>
+                                                                        <div class=" col-md-6 text-right">
+                                                                            <span class="prog_desc">Goal: &nbsp;&nbsp; <bold>@Model.CurrencyCode <span style="font-weight:bolder">@Math.Round(item.CampaignTargetMoney)</span> </bold></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="progress prog_main">
+                                                                        <div class="progress-bar progress-bar-striped bg-success active" role="progressbar" style="width: @item.RaisedPercentage%; background-color:#18bc9c" aria-valuenow=@item.RaisedPercentage aria-valuemin="0" aria-valuemax="100"><span title="@item.RaisedPercentage% Raised"></span></div>
+                                                                    </div>
+                                                                </div>
+
+
+
+                                                            </div>
+                                                        </div>
+
+                                                        if (i == 6)
+                                                        {
+                                                            <div class="div-center"> <p><a href='/Admin/AllCampaigns/?viewtype=1' target="_blank" class="btn  btn-primary">See More &raquo;</a></p></div>
+
+                                                            break;
+                                                        }
+
+                                                    }
+                                                }
+                                                else
+                                                {<p>No records Found</p>}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingTwo2">
+                                        <h4 class="panel-title">
+                                            <a role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo2" aria-expanded="false" aria-controls="collapseTwo">
+                                                <b> Campaigns - Waiting for Approval!!</b>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseTwo2" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo2">
+                                        <div class="panel-body">
+                                            <div class="panelid">
+                                                @if (Model.PendingStoriesViewModel.CampaignViewModelList.Any())
+                                                {
+                                                    int i = 0;
+                                                    foreach (var item in Model.PendingStoriesViewModel.CampaignViewModelList)
+                                                    {
+                                                        i = i + 1;
+                                                        <div class="col-md-4 portfolio-item">
+                                                            <div class="div_topCampaignss">
+
+                                                                <h4 class="cam_card-header">@item.CampaignTitle</h4>
+
+
+                                                                <a href='/Admin/CampaignView/?Id=@item.Id'>
+                                                                    <p style="" class="text-center">
+                                                                        @if (item.CampainOrganizer.BDisplayPic != null)
+                                                                        {
+                                                                            var getImage = System.Convert.ToBase64String(item.CampainOrganizer.BDisplayPic);
+                                                                            var Picture = string.Format("data:image/JPG;base64 , {0}", getImage);
+
+                                                                            if (i > 6)
+                                                                            {
+                                                                                <img class="lazy cam-card-image img-responsive" src="~/Images/placeholder_main.png" data-src="@Url.Content(Picture)" alt="@item.CampainOrganizer.BDisplayPicName">
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <img class="cam-card-image img-responsive" src="@Url.Content(Picture)" alt="@item.CampainOrganizer.BDisplayPicName">
+
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {<img id="user_img"
+                                                                              margin-left="0px"
+                                                                              margin-right="180px"
+                                                                              class="cam-card-image img-responsive" />
+                                                                        }
+                                                                    </p>
+                                                                </a>
+                                                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                    <div class="col-md-6 col-sm-6 col-xs-6 text-left">
+                                                                        <span>
+                                                                            <i class="glyphicon glyphicon-tag icon_tag">
+                                                                            </i><label style="font-size:12px"> @item.CategoryName</label>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="col-md-6 col-sm-6 col-xs-6 text-right">
+                                                                        <span>
+                                                                            <i class="glyphicon glyphicon-map-marker icon_tag">
+                                                                            </i><label class="text-left" style="font-size:12px;width:100px">
+                                                                                @(String.Format("{0}", item.CampainOrganizer.placeNmae))
+                                                                            </label>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-center cam-desc">
+                                                                    <p>@(String.Format("{0}{1}", item.campaignDescription != null ? (item.campaignDescription.StoryDescription != null ? item.campaignDescription.StripedDescription.Substring(0, item.campaignDescription.StripedDescription.Length > 75 ? 75 : item.campaignDescription.StripedDescription.Length) : "") : "", "....."))</p>
+                                                                </div>
+                                                                <p class="text-center cam-desc-more">
+
+                                                                    <a href='/Admin/CampaignView/?Id=@item.Id'>Read More</a>
+                                                                    | @Html.ActionLink(item.IsApprovedbyAdmin ? "Un Approve" : "Approve", "ApproveStory", new { id = item.Id, Approve = item.IsApprovedbyAdmin ? false : true }, new { @class = "Approve" })
+
+
+                                                                </p>
+
+                                                                <div class="text-center prog_div">
+                                                                    <div class="row">
+                                                                        <div class=" col-md-6 text-left">
+                                                                            <span class="prog_desc">Raised: &nbsp;&nbsp; <bold>@Model.CurrencyCode <span style="font-weight:bolder">@item.RaisedAmount</span> </bold> </span>
+                                                                        </div>
+                                                                        <div class=" col-md-6 text-right">
+                                                                            <span class="prog_desc">Goal: &nbsp;&nbsp; <bold>@Model.CurrencyCode <span style="font-weight:bolder">@Math.Round(item.CampaignTargetMoney)</span> </bold></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="progress prog_main">
+                                                                        <div class="progress-bar progress-bar-striped bg-success active" role="progressbar" style="width: @item.RaisedPercentage%; background-color:#18bc9c" aria-valuenow=@item.RaisedPercentage aria-valuemin="0" aria-valuemax="100"><span title="@item.RaisedPercentage% Raised"></span></div>
+                                                                    </div>
+                                                                </div>
+
+
+
+                                                            </div>
+                                                        </div>
+
+                                                        if (i == 6)
+                                                        {
+                                                            <div class="div-center"> <p><a href='/Admin/AllCampaigns/?viewtype=2' target="_blank" class="btn  btn-primary">See More &raquo;</a></p></div>
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {<p>No records Found</p>}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingThree2">
+                                        <h4 class="panel-title">
+                                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree2" aria-expanded="false" aria-controls="collapseThree2">
+                                                <b>Campaigns - Fraudulence!!</b>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseThree2" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingThree2">
+                                        <div class="panel-body">
+                                            <div class="panelid">
+                                                @if (Model.FraudStoriesViewModel.CampaignViewModelList.Any())
+                                                {
+                                                    int i = 0;
+                                                    foreach (var item in Model.FraudStoriesViewModel.CampaignViewModelList)
+                                                    {
+                                                        i = i + 1;
+
+                                                        <div class="col-md-4 portfolio-item">
+                                                            <div class="div_topCampaignss">
+
+                                                                <h4 class="cam_card-header">@item.CampaignTitle</h4>
+
+
+                                                                <a href='/Admin/CampaignView/?Id=@item.Id'>
+                                                                    <p style="" class="text-center">
+                                                                        @if (item.CampainOrganizer.BDisplayPic != null)
+                                                                        {
+                                                                            var getImage = System.Convert.ToBase64String(item.CampainOrganizer.BDisplayPic);
+                                                                            var Picture = string.Format("data:image/JPG;base64 , {0}", getImage);
+
+                                                                            if (i > 6)
+                                                                            {
+                                                                                <img class="lazy cam-card-image img-responsive" src="~/Images/placeholder_main.png" data-src="@Url.Content(Picture)" alt="@item.CampainOrganizer.BDisplayPicName">
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <img class="cam-card-image img-responsive" src="@Url.Content(Picture)" alt="@item.CampainOrganizer.BDisplayPicName">
+
+                                                                            }
+                                                                        }
+                                                                        else
+                                                                        {<img id="user_img"
+                                                                              margin-left="0px"
+                                                                              margin-right="180px"
+                                                                              class="cam-card-image img-responsive" />
+                                                                        }
+                                                                    </p>
+                                                                </a>
+                                                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                    <div class="col-md-6 col-sm-6 col-xs-6 text-left">
+                                                                        <span>
+                                                                            <i class="glyphicon glyphicon-tag icon_tag">
+                                                                            </i><label style="font-size:12px"> @item.CategoryName</label>
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="col-md-6 col-sm-6 col-xs-6 text-right">
+                                                                        <span>
+                                                                            <i class="glyphicon glyphicon-map-marker icon_tag">
+                                                                            </i><label class="text-left" style="font-size:12px;width:100px">
+                                                                                @(String.Format("{0}", item.CampainOrganizer.placeNmae))
+                                                                            </label>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-center cam-desc">
+                                                                    <p>@(String.Format("{0}{1}", item.campaignDescription != null ? (item.campaignDescription.StoryDescription != null ? item.campaignDescription.StripedDescription.Substring(0, item.campaignDescription.StripedDescription.Length > 75 ? 75 : item.campaignDescription.StripedDescription.Length) : "") : "", "....."))</p>
+                                                                </div>
+                                                                <p class="text-center cam-desc-more">
+
+                                                                    <a href='/Admin/CampaignView/?Id=@item.Id'>Read More</a>
+                                                                    | @Html.ActionLink(item.IsApprovedbyAdmin ? "Un Approve" : "Approve", "ApproveStory", new { id = item.Id, Approve = item.IsApprovedbyAdmin ? false : true }, new { @class = "Approve" })
+
+
+                                                                </p>
+
+                                                                <div class="text-center prog_div">
+                                                                    <div class="row">
+                                                                        <div class=" col-md-6 text-left">
+                                                                            <span class="prog_desc">Raised: &nbsp;&nbsp; <bold>@Model.CurrencyCode <span style="font-weight:bolder">@item.RaisedAmount</span> </bold> </span>
+                                                                        </div>
+                                                                        <div class=" col-md-6 text-right">
+                                                                            <span class="prog_desc">Goal: &nbsp;&nbsp; <bold>@Model.CurrencyCode <span style="font-weight:bolder">@Math.Round(item.CampaignTargetMoney)</span> </bold></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="progress prog_main">
+                                                                        <div class="progress-bar progress-bar-striped bg-success active" role="progressbar" style="width: @item.RaisedPercentage%; background-color:#18bc9c" aria-valuenow=@item.RaisedPercentage aria-valuemin="0" aria-valuemax="100"><span title="@item.RaisedPercentage% Raised"></span></div>
+                                                                    </div>
+                                                                </div>
+
+
+
+                                                            </div>
+                                                        </div>
+
+
+                                                        if (i == 6)
+                                                        {
+                                                            <div class="div-center"> <p><a href='/Admin/AllCampaigns/?viewtype=3' target="_blank" class="btn  btn-primary">See More &raquo;</a></p></div>
+                                                            break;
+                                                        }
+
+                                                    }
+                                                }
+                                                else
+                                                {<p>No records Found</p>}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </center>
+                </div>
+            </div>
+
+
+
+        </div>
+
+        <!-- /.row -->
+    </div>
+</div>
+
+<script>
+
+
+    $(document).ready(function () {
+        // toastr.success('The Campaign Approved Successfully.')
+        toastr.options = {
+
+            tapToDismiss: true,
+
+            // toast class
+            toastClass: 'toast',
+
+            // container ID
+            containerId: 'toast-container',
+
+            // debug mode
+            debug: false,
+
+            // fadeIn, slideDown, and show are built into jQuery
+            showMethod: 'fadeIn',
+
+            // duration of animation
+            showDuration: 300,
+
+            // easing function
+            showEasing: 'swing',
+
+            // callback function
+            onShown: undefined,
+            onHidden: undefined,
+
+            // hide animation
+            hideMethod: 'fadeOut',
+
+            // duration of animation
+            hideDuration: 1000,
+
+            // easing function
+            hideEasing: 'swing',
+
+            // close animation
+            closeMethod: false,
+
+            // duration of animation
+            closeDuration: false,
+
+            // easing function
+            closeEasing: false,
+
+            // timeout in ms
+            extendedTimeOut: 1000,
+
+            // you can customize icons here
+            iconClasses: {
+                error: 'toast-error',
+                info: 'toast-info',
+                success: 'toast-success',
+                warning: 'toast-warning'
+            },
+            iconClass: 'toast-info',
+
+            // toast-top-center, toast-bottom-center, toast-top-full-width
+            // toast-bottom-full-width, toast-top-left, toast-bottom-right
+            // toast-bottom-left, toast-top-right
+            positionClass: 'toast-top-right',
+
+            // set timeOut and extendedTimeOut to 0 to make it sticky
+            timeOut: 10000,
+
+            // title class
+            titleClass: 'toast-title',
+
+            // message class
+            messageClass: 'toast-message',
+
+            // allows HTML content in the toast?
+            escapeHtml: false,
+
+            // target container
+            target: 'body',
+
+            // close button
+            closeHtml: '<button type="button">&times;</button>',
+
+            // place the newest toast on the top
+            newestOnTop: true,
+
+            // revent duplicate toasts
+            preventDuplicates: false,
+
+            // shows progress bar
+            progressBar: false
+
+        };
+
+        //$('#toastr-success').click(function () {
+        //    toastr.success('This is a success notification from toastr.')
+        //});
+
+        //$('#toastr-info').click(function () {
+        //    toastr.info('This is an information notification provided by toastr.')
+        //});
+
+        //$('#toastr-warning').click(function () {
+        //    toastr.warning('This is a warning notification provided by toastr.')
+        //});
+
+        //$('#toastr-error').click(function () {
+        //    toastr.error('This is an error notification provided by toastr.')
+        //});
+    });
+
+    $(function () {
+        $('.Approve').click(function () {
+            var $Approve = $(this);
+            $.post(this.href, function (result) {
+
+                toastr.success('The Campaign Approved Successfully.')
+
+            });
+        });
+    });
+
+    function OnTypeChanged(_this) {
+
+        var selectedValue = $(_this).val();
+        window.location.href = '/Admin/Index/?Category=' + selectedValue;// $("#SelectedOptions").val();
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
+        let active = false;
+
+        const lazyLoad = function () {
+            if (active === false) {
+                active = true;
+
+                setTimeout(function () {
+                    lazyImages.forEach(function (lazyImage) {
+                        if ((lazyImage.getBoundingClientRect().top <= window.innerHeight && lazyImage.getBoundingClientRect().bottom >= 0) && getComputedStyle(lazyImage).display !== "none") {
+                            lazyImage.src = lazyImage.dataset.src;
+                            lazyImage.classList.remove("lazy");
+
+                            lazyImages = lazyImages.filter(function (image) {
+                                return image !== lazyImage;
+                            });
+
+                            if (lazyImages.length === 0) {
+                                document.removeEventListener("scroll", lazyLoad);
+                                window.removeEventListener("resize", lazyLoad);
+                                window.removeEventListener("orientationchange", lazyLoad);
+                            }
+                        }
+                    });
+
+                    active = false;
+                }, 200);
+            }
+        };
+
+        document.addEventListener("scroll", lazyLoad);
+        window.addEventListener("resize", lazyLoad);
+        window.addEventListener("orientationchange", lazyLoad);
+    });
+</script>
+
+
+

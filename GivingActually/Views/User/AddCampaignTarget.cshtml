@@ -1,0 +1,229 @@
+﻿@model GivingActually.Models.CampaignMainViewModel
+
+@{
+    ViewBag.Title = "AddBeneficiary";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+</style>
+<h2>AddNewCampaign</h2>
+
+
+<body>
+    <div class="container">
+        <!-- MultiStep Form -->
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                @using (Html.BeginForm("AddBeneficiary", "User", FormMethod.Post, new { id = "msform", enctype = "multipart/form-data" }))
+                {
+                    <!-- progressbar -->
+                    <ul id="progressbar">
+                        <li class="active">Campaign Details</li>
+                        <li class="active">Campaign Display</li>
+                        <li>Campaign Story</li>
+                    </ul>
+                    <!-- fieldsets -->
+                    <fieldset>
+                        <h2 class="fs-title">About your Campaign</h2>
+                        <h3 class="fs-subtitle">Fill to let people know more about your fundraising Campaign</h3>
+
+                        <div class="form-horizontal" id="FormCampaign">
+                            <hr />
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.UserId)
+                            <input type="hidden" name="Organizer" id="CampainOrganizer_Id" value="@Model.CampainOrganizer.Id" />
+                            <input type="hidden" name="Id" id="Id" value="@Model.Id" />
+                            <div class="row">
+
+                                <div class="col-md-12">
+                                    <div class="form-group ">
+                                        @Html.LabelFor(model => model.CampainOrganizer.BDisplayPic, htmlAttributes: new { @class = "control-label col-md-4" })
+                                        <div class="col-md-8">
+                                            <div style="width:80px">
+                                                <img id="user_img"
+                                                     margin-left="0px"
+                                                     margin-right="180px"
+                                                     height="100"
+                                                     width="90"
+                                                     style="border:solid; padding:2px; margin-left:1px;" />
+                                            </div>
+                                            <input type="file" class="form-control" name="file2" id="BDisplayPic" style="width: 100%;" accept=".png,.jpg,.jpeg,.gif,.tif" filesize="10" onchange="showIMG(this)" required /> <br />
+                                            @Html.ValidationMessageFor(model => model.CampainOrganizer.BDisplayPic, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.CampainOrganizer.CountryId, htmlAttributes: new { @class = "control-label col-md-4 ", @id = "residence" })
+                                        <div class="col-md-8">
+                                            @*@Html.TextBoxFor(model => model.Beneficiary.BResidence, new { htmlAttributes = new { @class = "form-control" } })*@
+                                            @Html.DropDownListFor(model => model.CampainOrganizer.CountryId, Model.CampainOrganizer.AvailableCountries, new { @class = "form-control", onChange = "OnCountryChanged(this)" })
+                                            @Html.ValidationMessageFor(model => model.CampainOrganizer.CountryId, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.CampainOrganizer.BPinCode, htmlAttributes: new { @class = "control-label col-md-4 " })
+                                        <div class="col-md-8">
+                                            @Html.EditorFor(model => model.CampainOrganizer.BPinCode, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.CampainOrganizer.BPinCode, "", new { @class = "text-danger" })
+
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<div class="col-md-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.BeneficiaryType, htmlAttributes: new { @class = "control-label col-md-4" })
+                                        <div class="col-md-8">
+                                            @Html.DropDownListFor(model => model.BeneficiaryType, EnumHelper.GetSelectList(typeof(GivingActually.Models.HelperModels.Helper.BeneficiaryType)), "Select", new { @class = "form-control", onChange = "OnTypeChanged(this)" })
+                                            @Html.ValidationMessageFor(model => model.BeneficiaryType, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                @if ((Model.Id > 0 && (Model.BeneficiaryType.GetHashCode() == 1 || Model.BeneficiaryType.GetHashCode() == 3 || Model.BeneficiaryType.GetHashCode() == 5)))
+                                {
+                                    <div class="col-md-12 classIndividual">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.BName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.BName, new { htmlAttributes = new { @class = "form-control", @maxlength = "50" } })
+                                                @Html.ValidationMessageFor(model => model.BName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else if ((Model.Id == 0))
+                                {<div class="col-md-12 classIndividual" style="display:none">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.BName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.BName, new { htmlAttributes = new { @class = "form-control", @maxlength = "50" } })
+                                                @Html.ValidationMessageFor(model => model.BName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>}
+
+                                @if ((Model.Id > 0 && (Model.BeneficiaryType.GetHashCode() == 2 || Model.BeneficiaryType.GetHashCode() == 4 || Model.BeneficiaryType.GetHashCode() == 6)))
+                                {
+                                    <div class="col-md-12 classGroup">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.BGroupName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.BGroupName, new { htmlAttributes = new { @class = "form-control", @maxlength = "50" } })
+                                                @Html.ValidationMessageFor(model => model.BGroupName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else if ((Model.Id == 0))
+                                {
+                                    <div class="col-md-12 classGroup" style="display:none">
+                                        <div class="form-group">
+                                            @Html.LabelFor(model => model.BGroupName, htmlAttributes: new { @class = "control-label col-md-4" })
+                                            <div class="col-md-8">
+                                                @Html.EditorFor(model => model.BGroupName, new { htmlAttributes = new { @class = "form-control", @maxlength = "50" } })
+                                                @Html.ValidationMessageFor(model => model.BGroupName, "", new { @class = "text-danger" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                }*@
+                                <div class="col-md-12">
+                                    <div class="col-md-offset-2 col-lg-6">
+                                        <div class="form-group">
+                                            <div class="col-md-offset-4 col-md-8">
+                                                <input type="submit" value=@(Model.Id == 0 ? "Save And Continue" : "Update") class="next action-button" style="width:200px;" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="col-md-offset-2 col-lg-6">
+                                        <div class="form-group">
+                                            <div class="col-md-offset-4 col-md-8">
+                                                @if (Model.Id > 0)
+                                                {
+                                                    <a class="action-button-previous" href='/User/Index/'>Back</a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div>@Html.ActionLink("Back", "Index", "User")</div>
+                    </fieldset>
+                }
+
+
+            </div>
+        </div>
+        <!-- /.MultiStep Form -->
+    </div>
+
+
+</body>
+<script>
+    $(document).ready(function () {
+        $("input[type='file']").on("change", function () {
+            if (this.files[0].size > 2000000) {
+                alert("Please upload file less than 2MB. Thanks!!");
+                $(this).val('');
+            }
+        });
+
+    });
+    function textCounter(field, field2, maxlimit) {
+        var countfield = document.getElementById(field2);
+        if (field.value.length > maxlimit) {
+            field.value = field.value.substring(0, maxlimit);
+            return false;
+        } else {
+            countfield.value = maxlimit - field.value.length;
+        }
+    }
+
+    function OnTypeChanged(_this) {
+        var selectedValue = $(_this).val();
+        if (selectedValue == 2 || selectedValue == 4 || selectedValue == 6) {
+
+            hide(document.querySelectorAll('.classIndividual'));
+            show(document.querySelectorAll('.classGroup'));
+
+        }
+        if (selectedValue == 1 || selectedValue == 3) {
+
+            hide(document.querySelectorAll('.classGroup'));
+            show(document.querySelectorAll('.classIndividual'));
+
+        }
+
+        if (selectedValue == 0) {
+            hide(document.querySelectorAll('.classIndividual'));
+            hide(document.querySelectorAll('.classGroup'));
+
+        }
+
+
+    }
+
+    function hide(elements) {
+        elements = elements.length ? elements : [elements];
+        for (var index = 0; index < elements.length; index++) {
+            elements[index].style.display = 'none';
+        }
+    }
+
+    function show(elements, specifiedDisplay) {
+        elements = elements.length ? elements : [elements];
+        for (var index = 0; index < elements.length; index++) {
+            elements[index].style.display = specifiedDisplay || 'block';
+        }
+    }
+</script>

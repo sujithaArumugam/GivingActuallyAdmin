@@ -1,0 +1,107 @@
+﻿@model GivingActually.Models.CampaignsListViewModel
+    @{
+        ViewBag.Title = "Trending Campaigns";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    <style>
+        .Nav_body {
+            margin-left: 50px;
+            color: white;
+            background-color: aliceblue !important;
+            width: 1045px;
+        }
+    </style>
+    <body>
+        <div class="container">
+            <!-- MultiStep Form -->
+            <div class="row">
+                <div class="col-md-12">
+                    @using (Html.BeginForm("", "", FormMethod.Post, new { id = "msform", enctype = "multipart/form-data" }))
+                    {
+
+                        <fieldset >
+                            <h2 class="fs-title">The Trending Campaigns</h2>
+                            <h3 class="fs-subtitle">Just click to see why these Campaigns are trending!!</h3>
+
+
+                            <div class="form-horizontal ">
+                                <hr />
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CategoryType, htmlAttributes: new { @class = "control-label col-md-4" })
+                                    <div class="col-md-8">
+                                        @Html.DropDownListFor(model => model.CategoryType, EnumHelper.GetSelectList(typeof(GivingActually.Models.HelperModels.Helper.StoryCategory)), "Select", new { @class = "form-control", onChange = "OnTypeChanged(this)" })
+                                        @Html.ValidationMessageFor(model => model.CategoryType, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-top:2em;">
+
+                                    @if (Model.CampaignViewModelList.Any())
+                                    {
+                                        foreach (var item in Model.CampaignViewModelList)
+                                        {
+                                    <div class="col-md-6 col-lg-4 col-xl-3">
+                                        @*<div class="div_topCampaignss" style="border:groove;background-color:#ecf0f1">*@
+                                        <div class="div_topCampaignss" style="background-color:#ebfffb">
+
+                                            <p style="text-align:center; height:10px">@item.CampaignTitle</p>
+
+                                            <p style="text-align:center; height:10px">@item.CategoryName</p>
+                                            <p style="height:150px">
+                                                @if (item.CampainOrganizer.BDisplayPic != null)
+                                                {
+                                                    var getImage = System.Convert.ToBase64String(item.CampainOrganizer.BDisplayPic);
+                                                    var Picture = string.Format("data:image/JPG;base64 , {0}", getImage);
+                                                    <img src="@Url.Content(Picture)" alt="@item.CampainOrganizer.BDisplayPicName" height="150" width="250" style="padding-left: 40px;" />
+                                                    <meta property="og:image" content="@Url.Content(Picture)" />
+                                                }
+                                                else
+                                                {<img id="user_img"
+                                                      margin-left="0px"
+                                                      margin-right="180px"
+                                                      height="150" width="250" style="padding-left: 40px;" />
+                                                }
+                                            </p>
+                                            <div style="word-wrap: break-word;padding-left: 30px; height:90px; ">
+                                                <p>@(String.Format("{0}{1}", item.campaignDescription != null ? (item.campaignDescription.StoryDescription != null ? item.campaignDescription.StripedDescription.Substring(0, item.campaignDescription.StripedDescription.Length > 75 ? 75 : item.campaignDescription.StripedDescription.Length) : "") : "", "....."))</p>
+                                            </div>
+                                            <p style="text-align:center">
+
+                                                <a href='/Home/GetStoryDetail/?Id=@item.Id'>Read More</a>
+                                            </p>
+                                            <div style="padding-top:2em; padding-left:0.5em; padding-right:0.5em" class="text-center">
+                                                <p style="color:#1a977f" class="text-center"><bold>&euro; @item.RaisedAmount </bold> <small>Out Of </small> &euro; @Math.Round(item.CampaignTargetMoney) Raised</p>
+                                                <div class="progress" style=" border:1px solid #18bc9c;background-color:#e2fbf6; height:20px;">
+                                                    <div class="progress-bar progress-bar-striped bg-success active" role="progressbar" style="width: @item.RaisedPercentage%; background-color:#18bc9c" aria-valuenow='@item.RaisedPercentage' aria-valuemin="0" aria-valuemax="100"><bold style="font-size:x-small ;color:white">@item.RaisedPercentage % raised </bold></div>
+                                                </div>
+                                            </div>
+
+                                            <hr />
+                                        </div>
+                                    </div>
+
+
+                                        }
+                                    }
+                                    else
+                                    {<p>No records Found</p>}
+
+
+
+                                </div>
+                            </div>
+                        </fieldset>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </body>
+    <script>
+        function OnTypeChanged(_this) {
+
+            var selectedValue = $(_this).val();
+            window.location.href = '/Home/GetStories/?Category=' + selectedValue;// $("#SelectedOptions").val();
+        }
+    </script>
+
+

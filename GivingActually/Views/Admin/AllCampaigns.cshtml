@@ -1,0 +1,307 @@
+﻿@model GivingActually.Models.CampaignsListViewModel
+@{
+    ViewBag.Title = "All Campaigns";
+}
+
+
+
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="~/Scripts/toastr.js"></script>
+<link href="~/Content/toastr.css" rel="stylesheet" />
+
+
+<div class="container" style="padding-top:2em;">
+
+    <ul class="nav nav-tabs">
+        <li>@Html.ActionLink("Home", "Index", "Admin")</li>
+        <li>@Html.ActionLink("User Details", "UserDetails", "Admin", new { area = "" }, new { @class = "" })</li>
+        <li class="active"><a href="#MyCampaigns">Campaigns </a></li>
+
+    </ul>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                All CAMPAIGNS
+            </h1>
+          
+        </div>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        @if (Model.CampaignViewModelList.Any())
+        {
+
+            int i = 0;
+            foreach (var item in Model.CampaignViewModelList)
+            {
+                i = i + 1;
+        <div class="col-md-4 portfolio-item">
+            <div class="div_topCampaignss ">
+
+                <h4 class="cam_card-header">@item.CampaignTitle</h4>
+
+
+                <a href='/Home/CampaignView/?Id=@item.Id'>
+                    <p style="" class="text-center">
+                        @if (item.CampainOrganizer.BDisplayPic != null)
+                        {
+                            var getImage = System.Convert.ToBase64String(item.CampainOrganizer.BDisplayPic);
+                            var Picture = string.Format("data:image/JPG;base64 , {0}", getImage);
+
+                            if (i > 6)
+                            {
+                                <img class="lazy cam-card-image img-responsive" src="~/Images/placeholder_main.png" data-src="@Url.Content(Picture)" alt="@item.CampainOrganizer.BDisplayPicName">
+                            }
+                            else
+                            {
+                                <img class="cam-card-image img-responsive" src="@Url.Content(Picture)" alt="@item.CampainOrganizer.BDisplayPicName">
+
+                            }
+                        }
+                        else
+                        {<img id="user_img"
+                              margin-left="0px"
+                              margin-right="180px"
+                              class="cam-card-image img-responsive" />
+                        }
+                    </p>
+                </a>
+                <div class="col-md-12">
+                    <div class="col-sm-6">
+                        <span>
+                            <i class="glyphicon glyphicon-tag icon_tag">
+                            </i><medium> @item.CategoryName</medium>
+                        </span>
+                    </div>
+                    <div class="col-sm-6">
+                        <span>
+                            <i class="glyphicon glyphicon-map-marker icon_tag">
+                            </i><medium>
+                                @(String.Format("{0}",
+                                                                                                        item.CampainOrganizer.placeNmae != null ?
+                                                                                                        item.CampainOrganizer.placeNmae.Substring(item.CampainOrganizer.placeNmae.IndexOf(",") + 1) : ""))
+                            </medium>
+                        </span>
+                    </div>
+                </div>
+                <div class="text-center cam-desc">
+                    <p>@(String.Format("{0}{1}", item.campaignDescription != null ? (item.campaignDescription.StoryDescription != null ? item.campaignDescription.StripedDescription.Substring(0, item.campaignDescription.StripedDescription.Length > 75 ? 75 : item.campaignDescription.StripedDescription.Length) : "") : "", "....."))</p>
+                </div>
+                <p class="text-center cam-desc-more">
+
+                    <a href='/Home/CampaignView/?Id=@item.Id'>Read More</a>
+                    | @Html.ActionLink(item.IsApprovedbyAdmin ? "Un Approve" : "Approve", "ApproveStory", new { id = item.Id, Approve = item.IsApprovedbyAdmin ? false : true }, new { @class = "Approve" })
+
+                </p>
+
+                <div class="text-center prog_div">
+                    <div class="row">
+                        <div class=" col-md-6 text-left">
+                            <span class="prog_desc">Raised: &nbsp;&nbsp; <bold>@Model.CurrencyCode <span style="font-weight:bolder">@item.RaisedAmount</span> </bold> </span>
+                        </div>
+                        <div class=" col-md-6 text-right">
+                            <span class="prog_desc">Goal: &nbsp;&nbsp; <bold>@Model.CurrencyCode <span style="font-weight:bolder">@Math.Round(item.CampaignTargetMoney)</span> </bold></span>
+                        </div>
+                    </div>
+                    <div class="progress prog_main">
+                        <div class="progress-bar progress-bar-striped bg-success active" role="progressbar" style="width: @item.RaisedPercentage%; background-color:#18bc9c" aria-valuenow=@item.RaisedPercentage aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+            }
+        }
+        else
+        {<p>No records Found</p>}
+
+
+    </div>
+
+    <hr>
+    <div class="row text-center">
+        <div class="col-lg-12">
+            <ul class="pagination">
+                <li>
+                    <a href="#">«</a>
+                </li>
+                <li class="active">
+                    <a href="#">1</a>
+                </li>
+                <li>
+                    <a href="#">2</a>
+                </li>
+                <li>
+                    <a href="#">3</a>
+                </li>
+                <li>
+                    <a href="#">4</a>
+                </li>
+                <li>
+                    <a href="#">5</a>
+                </li>
+                <li>
+                    <a href="#">»</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        toastr.options = {
+
+            tapToDismiss: true,
+
+            // toast class
+            toastClass: 'toast',
+
+            // container ID
+            containerId: 'toast-container',
+
+            // debug mode
+            debug: false,
+
+            // fadeIn, slideDown, and show are built into jQuery
+            showMethod: 'fadeIn',
+
+            // duration of animation
+            showDuration: 300,
+
+            // easing function
+            showEasing: 'swing',
+
+            // callback function
+            onShown: undefined,
+            onHidden: undefined,
+
+            // hide animation
+            hideMethod: 'fadeOut',
+
+            // duration of animation
+            hideDuration: 1000,
+
+            // easing function
+            hideEasing: 'swing',
+
+            // close animation
+            closeMethod: false,
+
+            // duration of animation
+            closeDuration: false,
+
+            // easing function
+            closeEasing: false,
+
+            // timeout in ms
+            extendedTimeOut: 1000,
+
+            // you can customize icons here
+            iconClasses: {
+                error: 'toast-error',
+                info: 'toast-info',
+                success: 'toast-success',
+                warning: 'toast-warning'
+            },
+            iconClass: 'toast-info',
+
+            // toast-top-center, toast-bottom-center, toast-top-full-width
+            // toast-bottom-full-width, toast-top-left, toast-bottom-right
+            // toast-bottom-left, toast-top-right
+            positionClass: 'toast-top-right',
+
+            // set timeOut and extendedTimeOut to 0 to make it sticky
+            timeOut: 5000,
+
+            // title class
+            titleClass: 'toast-title',
+
+            // message class
+            messageClass: 'toast-message',
+
+            // allows HTML content in the toast?
+            escapeHtml: false,
+
+            // target container
+            target: 'body',
+
+            // close button
+            closeHtml: '<button type="button">&times;</button>',
+
+            // place the newest toast on the top
+            newestOnTop: true,
+
+            // revent duplicate toasts
+            preventDuplicates: false,
+
+            // shows progress bar
+            progressBar: false
+
+        };
+       
+        //$('#toastr-success').click(function () {
+        //    toastr.success('This is a success notification from toastr.')
+        //});
+
+        //$('#toastr-info').click(function () {
+        //    toastr.info('This is an information notification provided by toastr.')
+        //});
+
+        //$('#toastr-warning').click(function () {
+        //    toastr.warning('This is a warning notification provided by toastr.')
+        //});
+
+        //$('#toastr-error').click(function () {
+        //    toastr.error('This is an error notification provided by toastr.')
+        //});
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        let lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
+        let active = false;
+
+        const lazyLoad = function () {
+            if (active === false) {
+                active = true;
+
+                setTimeout(function () {
+                    lazyImages.forEach(function (lazyImage) {
+                        if ((lazyImage.getBoundingClientRect().top <= window.innerHeight && lazyImage.getBoundingClientRect().bottom >= 0) && getComputedStyle(lazyImage).display !== "none") {
+                            lazyImage.src = lazyImage.dataset.src;
+                            lazyImage.classList.remove("lazy");
+
+                            lazyImages = lazyImages.filter(function (image) {
+                                return image !== lazyImage;
+                            });
+
+                            if (lazyImages.length === 0) {
+                                document.removeEventListener("scroll", lazyLoad);
+                                document.removeEventListener("mousemove", lazyLoad);
+                                window.removeEventListener("resize", lazyLoad);
+                                window.removeEventListener("orientationchange", lazyLoad);
+                            }
+                        }
+                    });
+
+                    active = false;
+                }, 20);
+            }
+        };
+
+        document.addEventListener("scroll", lazyLoad);
+        document.addEventListener("mousemove", lazyLoad);
+        window.addEventListener("resize", lazyLoad);
+        window.addEventListener("orientationchange", lazyLoad);
+    });
+    $(function () {
+        $('.Approve').click(function () {
+            var $Approve = $(this);
+            $.post(this.href, function (result) {
+                toastr.success('The Campaign Approved Successfully.')
+                
+            });
+        });
+    });
+</script>

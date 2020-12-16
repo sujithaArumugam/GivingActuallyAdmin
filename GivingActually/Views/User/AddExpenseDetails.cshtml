@@ -1,0 +1,90 @@
+﻿@model GivingActually.Models.StoryAccountsDetails
+@{
+    ViewBag.Title = "AddExpenseDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>AddExpenseDetails</h2>
+<div id="outer">
+    <div id="nav">
+        <div class="content">
+            <ul>
+
+                <li>@Html.ActionLink("Back", "Index", "User", new { area = "" }, new { @class = "" })</li>
+            </ul>
+        </div>
+
+    </div>
+    <div id="main" class="wideContent">
+        <!-- col2 --><div id="col2">
+
+
+            <!-- box --><div class="box boxFirst">
+
+                <div class="content">
+                    @using (Html.BeginForm())
+                    {
+                        @*<div class="form-group">
+                            <div class="col-md-10">*@
+                        @Html.HiddenFor(Model => Model.StoryID, new { htmlAttributes = new { @class = "form-control" } })
+                        @*</div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-10">*@
+                        @Html.LabelFor(Model => Model.AvailableCredit)
+                        @*</div>
+                            </div>*@
+                        <div class="form-group">
+                            @Html.Label("Available Credits", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @if (Model.AvailableCredit != null)
+                                {
+                                    @Html.LabelFor(Model => Model.AvailableCredit)
+                                }
+                            </div>
+                        </div>
+                        <div id="TextBoxContainer">
+
+                            @for (int i = 0; i < Model.Debits.Count(); i++)
+                            {
+                                <div class="Debits">
+                                    @*<div class="col-md-10">*@
+                                    @Html.TextBoxFor(m => m.Debits[i].ExpenseDescription, new { @class = "form-control" })
+                                    @Html.TextBoxFor(m => m.Debits[i].Expense, new { @class = "form-control" })
+                                    <br />
+                                    @*</div>*@
+                                </div>
+                            }
+
+                        </div>
+                        <input type="button" id="Add_Row" value="Add Item" />
+                        <br /><br /><br />
+                        <input type="submit" value="Submit" />
+                    }
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <div id="footer">
+        <div class="content">
+        </div>
+    </div>
+    @*</div>*@
+</div>
+<script type="text/javascript">
+    $("#Add_Row").on("click", function () {
+        var new_Div = GetDynamicTextBox($(".Debits").length);
+        //  div.html(GetDynamicTextBox(""));
+        $("#TextBoxContainer").append(new_Div);
+    });
+
+    function GetDynamicTextBox(index) {
+        return '<br /><div class="Debits"><input class="tbAmount" id="Debits_' + index + '__ExpenseDescription" name="Debits[' + index + '].ExpenseDescription" type="text">  ' +
+            '<input class="tbAmount" data-val="true" data-val-number="The field Expense must be a number." data-val-required="The Expense field is required." id="Debits_' + index + '__Expense" name="Debits[' + index + '].Expense" type="text" value="0"></div>'
+    }
+</script>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="16bc0a74c5d944b99d9f26d3bb1e8559" Name="Diagram1" ZoomLevel="62">
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_StoriesAttachment" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_User" Width="1.5" PointX="0.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_UserAuthentication" Width="1.5" PointX="3" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_Beneficiary" Width="1.5" PointX="5.375" PointY="5.75" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_Target" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_Stories" Width="1.5" PointX="3" PointY="0.75" />
+        <AssociationConnector Association="GivingActuallyModel.FK_Tbl_Stories_Tbl_Stories" />
+        <AssociationConnector Association="GivingActuallyModel.FK_Tbl_StoriesAttachment_Tbl_Stories" />
+        <AssociationConnector Association="GivingActuallyModel.FK_Tbl_Target_Tbl_Stories" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_GeoLocation" Width="1.5" PointX="9.375" PointY="0.75" />
+        <EntityTypeShape EntityType="GivingActuallyModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="8.75" />
+        <EntityTypeShape EntityType="GivingActuallyModel.City" Width="1.5" PointX="12.25" PointY="12" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_Countries" Width="1.5" PointX="7.75" PointY="10.625" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_States" Width="1.5" PointX="10" PointY="10.375" />
+        <AssociationConnector Association="GivingActuallyModel.FK_Cities_States" />
+        <AssociationConnector Association="GivingActuallyModel.FK_States_Countries" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_BeneficiaryDetails" Width="1.5" PointX="13.375" PointY="0.75" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_Campaign" Width="1.5" PointX="3" PointY="8.75" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_CampaignTarget" Width="1.5" PointX="5.375" PointY="13.75" />
+        <AssociationConnector Association="GivingActuallyModel.FK_Tbl_Campaign_Tbl_Campaign" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_CampaignDescription" Width="1.5" PointX="7.375" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_Like" Width="1.5" PointX="10.25" PointY="4" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_ParentComment" Width="1.5" PointX="8.25" PointY="6.875" />
+        <AssociationConnector Association="GivingActuallyModel.FK_Like_Story" />
+        <AssociationConnector Association="GivingActuallyModel.FK_ParentComment_Story" />
+        <AssociationConnector Association="GivingActuallyModel.FK_Tbl_StoriesAttachment_Tbl_Campaign" />
+        <AssociationConnector Association="GivingActuallyModel.FK_Like_user" />
+        <AssociationConnector Association="GivingActuallyModel.FK_parent_user" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_PinCodeDetails" Width="1.5" PointX="10" PointY="14.125" />
+        <AssociationConnector Association="GivingActuallyModel.FK_ctry_cities" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_CampaignDonation" Width="1.5" PointX="5.25" PointY="17.625" />
+        <AssociationConnector Association="GivingActuallyModel.FK_Tbl_CampaignDonation_Tbl_Campaign" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_CityDetails" Width="1.5" PointX="10.375" PointY="7.75" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_CampaignDescriptionUpdates" Width="1.5" PointX="12.375" PointY="5.75" />
+        <EntityTypeShape EntityType="GivingActuallyModel.Tbl_UpdatesAttachment" Width="1.5" PointX="5.25" PointY="23" />
+        <AssociationConnector Association="GivingActuallyModel.FK_Tbl_Attachment_Tbl_Campaign" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,125 @@
+﻿@model GivingActually.Models.UserDetails
+@{
+    ViewBag.Title = "UserDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var table = $("#UserTbl").DataTable({
+            "order": [[1, "asc"]]
+        });
+    });
+
+
+</script>
+
+
+<div class="container" style="padding-top:2em;">
+    <div class="row">
+        <ul class="nav nav-tabs">
+            <li>@Html.ActionLink("Home", "Index", "Admin")</li>
+            <li class="active"><a href="#MyCampaigns">User Details </a></li>
+            <li>@Html.ActionLink("Campaigns", "AllCampaigns", "Admin", new { area = "" }, new { @class = "" })</li>
+
+
+        </ul>
+        <h1 class="page-header">
+            User Details
+            <small>Just click to Manage the User Rights?!!</small>
+        </h1>
+        @*<ol class="breadcrumb">
+            <li>
+                @Html.ActionLink("Home", "Index", "Admin")
+            </li>
+
+        </ol>*@
+        <div class="col-md-11 col-md-offset-1">
+            @using (Html.BeginForm("", "", FormMethod.Post, new { id = "msform", enctype = "multipart/form-data" }))
+            {
+
+
+                <fieldset>
+
+
+                    <div class="form-horizontal ">
+                        <hr />
+
+                        <div class="row">
+                            <div class="content">
+                                <table id="UserTbl" class="display responsive nowrap" style="width:100%">
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayName("Sno")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("User Name")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("IsAcLocked")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("IsActive")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("IsSpamUser")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("IsAdmin")
+                                        </th>
+                                        <th>
+                                            @Html.DisplayName("Actions")
+                                        </th>
+                                    </tr>
+                                    @{ int i = 1;}
+                                    @foreach (var item in Model.Users)
+                                    {
+
+                                        <tr>
+                                            <td>
+                                                <span>@i</span>
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.UserName)
+                                            </td>
+                                            <td>
+                                                @(item.IsAcLocked ? "Yes" : "No")
+                                            </td>
+                                            <td>
+                                                @(item.IsActive ? "Yes" : "No")
+                                            </td>
+                                            <td>
+                                                @(item.IsSpamUser ? "Yes" : "No")
+                                            </td>
+                                            <td>
+                                                @(item.IsAdmin ? "Yes" : "No")
+                                            </td>
+                                            <td>
+
+                                                @Html.ActionLink(item.IsAcLocked ? "Un Lock" : "Lock", "Lock/Unlock", new { id = item.Id, Lock = item.IsAcLocked ? false : true }) |
+                                                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                            </td>
+                                        </tr>
+                                        i++;
+                                    }
+                                </table>
+
+
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                </fieldset>
+            }
+
+        </div>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,372 @@
+﻿@model GivingActually.Models.CampaignMainViewModel
+@{
+    ViewBag.Title = "Story Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <title>Need Your Help for the campaign - GivingActually</title>
+    <!-- You can use Open Graph tags to customize link previews.
+    Learn more: https://developers.facebook.com/docs/sharing/webmasters -->
+    <meta property="og:url" content=encodeURIComponent(window.location.href) />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="GivingActually" />
+    <meta property="og:description" content="Need Your Help for the campaign - GivingActually" />
+</head>
+<style>
+    .commentTextArea {
+        width: 100%;
+        height: 50px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        border: 1px solid transparent;
+    }
+    /* Three image containers (use 25% for four, and 50% for two, etc) */
+    .column {
+        float: left;
+        width: 60%;
+        padding: 5px;
+        border: groove;
+        height: 1000px;
+        overflow: scroll;
+    }
+    .column1 {
+        float: left;
+        width: 40%;
+        padding: 5px;
+        border: groove;
+        height: 1000px;
+        overflow: scroll;
+    }
+    /* Clear floats after image containers */
+    .row::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+
+    .carousel-indicators li {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        margin: 10px;
+        text-indent: 0;
+        cursor: pointer;
+        border: none;
+        border-radius: 50%;
+        background-color: #0000ff;
+        box-shadow: inset 1px 1px 1px 1px rgba(0,0,0,0.5);
+    }
+
+    .carousel-indicators .active {
+        width: 18px;
+        height: 18px;
+        margin: 10px;
+        background-color: #ffff99;
+    }
+
+    a {
+        text-decoration: none
+    }
+</style>
+
+<body>
+    <div class="container">
+        <!-- MultiStep Form -->
+
+
+
+        <div class="row">
+
+            <div class="col-md-12">
+                @using (Html.BeginForm("", "", FormMethod.Post, new { id = "msform", enctype = "multipart/form-data" }))
+                {
+
+
+                    <fieldset>
+                        <h4>@Model.CampaignTitle | @Model.StoryCategory</h4>
+                        <h3 class="fs-subtitle"></h3>
+                        <div class="form-horizontal ">
+                            <hr />
+
+                            <div class="row">
+                                <div class="column">
+
+                                    <div class="content">
+                                        <h2>@Model.CampaignTitle</h2>
+
+
+                                        <p style="height:150px">
+                                            @if (Model.CampainOrganizer.BDisplayPic != null)
+                                            {
+                                                var getImage = System.Convert.ToBase64String(Model.CampainOrganizer.BDisplayPic);
+                                                var Picture = string.Format("data:image/JPG;base64 , {0}", getImage);
+                                                <img src="@Url.Content(Picture)" alt="@Model.CampainOrganizer.BDisplayPicName" height="150" width="250" style="padding-left: 40px;" />
+                                                <meta property="og:image" content="@Url.Content(Picture)" />
+                                            }
+                                            else
+                                            {<img id="user_img"
+                                                  margin-left="0px"
+                                                  margin-right="180px"
+                                                  height="150" width="250" style="padding-left: 40px;" />
+                                            }
+                                        </p>
+
+                                       
+                                        
+
+
+                                        @*<div style="word-wrap: break-word;padding-left: 30px; height:90px; ">
+            <p> @(String.Format("{0}{1}", Model.campaignDescription != null ? (Model.campaignDescription.StoryDescription != null ? Model.campaignDescription.StoryDescription.Substring(0, Model.campaignDescription.StoryDescription.Length > 75 ? 75 : Model.campaignDescription.StoryDescription.Length) : "") : "", "....."))</p>
+        </div>*@
+                                        <div class="container-sm " style="word-wrap: break-word;">
+                                            <p style="width:100%;"> @Html.Raw(String.Format("{0}", Model.campaignDescription != null ? (Model.campaignDescription.StoryDescription != null ? Model.campaignDescription.StoryDescription : "") : ""))</p>
+                                        </div>
+                                        <hr />
+                                        @if (Model.Files.Any())
+                                        {
+                                            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                                                <!-- Indicators -->
+                                                <ol class="carousel-indicators">
+                                                    @if (Model.Files.Any())
+                                                    {
+                                                        int i = 0;
+                                                        foreach (var fitem1 in Model.Files)
+                                                        {
+                                                            if (i == 0)
+                                                            {
+                                                                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                                                            }
+                                                            <li data-target="#myCarousel" data-slide-to="@i"></li>
+                                                            i = i + 1;
+                                                        }
+                                                    }
+                                                </ol>
+
+                                                <!-- Wrapper for slides -->
+                                                <div class="carousel-inner">
+                                                    @if (Model.Files.Any())
+                                                    {
+                                                        int i = 0;
+                                                        foreach (var fitem in Model.Files)
+                                                        {
+                                                            if (i == 0)
+                                                            {
+                                                                <div class="item active">
+                                                                    @{
+                                                                        var getImage2 = System.Convert.ToBase64String(fitem.File);
+                                                                        var Picture2 = string.Format("data:image/JPG;base64 , {0}", getImage2);
+                                                                        <img src="@Url.Content(Picture2)" alt="@fitem.FileName" style="height:200px;width:100%;" />
+                                                                        <meta property="og:image" content="@Url.Content(Picture2)" />
+                                                                    }
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="item">
+                                                                    @{
+                                                                        var getImage1 = System.Convert.ToBase64String(fitem.File);
+                                                                        var Picture1 = string.Format("data:image/JPG;base64 , {0}", getImage1);
+                                                                        if (fitem.ContentType == "video/mp4")
+                                                                        {
+
+                                                                            <video width="200" height="200" controls loop="loop">
+                                                                                <source src="@Url.Content(Picture1)" type="video/mp4">
+                                                                                Your browser does not support the video tag.
+                                                                            </video>
+                                                                        }
+                                                                        else
+                                                                        {
+
+                                                                            <img src="@Url.Content(Picture1)" alt="@fitem.FileName" style="height:200px;width:100%;" />
+                                                                            <meta property="og:image" content="@Url.Content(Picture1)" />
+                                                                        }
+                                                                    }
+                                                                </div>
+                                                            }
+                                                            i = i + 1;
+                                                        }
+                                                    }
+                                                </div>
+
+                                                <!-- Left and right controls -->
+                                                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                                                    <span class="glyphicon glyphicon-chevron-left"></span>
+                                                    <span class="sr-only">Previous</span>
+                                                </a>
+                                                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                                                    <span class="glyphicon glyphicon-chevron-right"></span>
+                                                    <span class="sr-only">Next</span>
+                                                </a>
+                                            </div>
+                                            <hr />
+                                        }
+                                        <div class="col-md-12">
+                                            <div class="col-md-4">
+                                                <div>@Html.ActionLink("Back", "Index", "Home")</div>
+                                            </div>
+
+                                            <div class=" col-md-4">
+                                                <p>
+                                                    <a href='https://facebook.com/sharer.php?u=' + encodeURIComponent(window.location.href)>Facebook</a>
+                                                    <div class="fb-share-button"
+                                                         data-href=encodeURIComponent(window.location.href)
+                                                         data-layout="button_count">
+                                                    </div>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="column1">
+                                    <div class="col-md-12">
+                                        @if (HttpContext.Current.Session["UserName"] != null)
+                                        {
+                                            <div class="col-md-12" style="align-self:center ; padding-top:2em; padding-bottom:2em;">
+
+                                                <a href='/Home/DonateCampaign/?Id=@Model.Id' class="next"> <span class="glyphicon glyphicon-gift"></span> Donate Now</a>
+                                            </div>
+                                        }
+
+                                    </div>
+                                    <div class="col-md-12">
+                                        @if (HttpContext.Current.Session["UserName"] != null)
+                                        {
+
+                                            <div class="col-md-12" style="align-self:center">
+                                                @if (Model.isLiked)
+                                                {
+
+                                                    <button type="button" class="action-button-previous" title="You are already supporting this Camapign!">
+                                                        <span class="glyphicon glyphicon-thumbs-up"></span> Support
+                                                    </button>
+
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="action-button-previous" onclick="btnlike_clicked()" title="Click to Support this Camapign!">
+                                                        <span class="glyphicon glyphicon-thumbs-up"></span> Support
+                                                    </button>
+                                                }
+                                            </div>
+
+
+                                        }
+
+                                    </div>
+                                    <hr />
+                                    <div class="col-md-12">
+                                        <div class="col-md-4">
+                                            <div id="CommentscountPartialViewDiv">
+                                                @{
+                                                    Html.RenderPartial("_commentcount", Model);
+                                                }
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div id="LikesPartialViewDiv">
+                                                @{
+                                                    Html.RenderPartial("_Like", Model);
+                                                }
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div id="DonorsPartialViewDiv">
+                                                @{
+                                                    Html.RenderPartial("_Donors", Model);
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="panel panel-success">
+                                                <div class="panel-heading">
+                                                    @if (HttpContext.Current.Session["UserName"] != null)
+                                                    {
+
+                                                        using (Html.BeginForm("AddComments", "User", FormMethod.Post))
+                                                        {
+                                                            @Html.HiddenFor(model => model.Id)
+                                                            @Html.AntiForgeryToken()
+                                                    <div class="form-group">
+                                                        <h5>Your Comment:</h5>
+                                                        @Html.TextAreaFor(model => model.CommentText, new { @class = "form-control", @PlaceHolder = "Leave a Comment here...." })
+
+                                                    </div>
+                                                            
+                                                           <button type="button" class="action-button-previous" title="Please Login to Post the comment">
+                                                                <span class="glyphicon glyphicon-share"></span> Post
+                                                            </button>
+
+                                                        }
+
+
+
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.Label("Please Login to Comment")
+
+
+
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+
+                                        <div id="CommentsPartialViewDiv">
+                                            @{
+                                                Html.RenderPartial("_Comments", Model);
+                                            }
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </fieldset>
+                }
+
+
+            </div>
+
+
+        </div>
+
+
+
+
+    </div>
+</body>
+
+<script language="javascript">
+
+
+
+
+    function fbshareCurrentPage() {
+
+        window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(window.location.href) + "&t=" + document.title, '',
+            'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+        return false;
+    }
+
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.0";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
